@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\TagController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -11,6 +14,9 @@ Route::get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('items', ItemController::class);
+    Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('locations', LocationController::class);
+    Route::apiResource('tags', TagController::class);
 });
 
 // Example route to issue an API token for the authenticated user
