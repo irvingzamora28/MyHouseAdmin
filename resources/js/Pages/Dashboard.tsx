@@ -5,7 +5,7 @@ import { SearchContext } from '@/Contexts/SearchContext';
 import StatsCard from '@/Components/Dashboard/StatsCard';
 import LocationOverview from '@/Components/Dashboard/LocationOverview';
 import RecentActivity from '@/Components/Dashboard/RecentActivity';
-import { FaPlus, FaBoxOpen, FaTag, FaWarehouse } from 'react-icons/fa';
+import { FaPlus, FaBoxOpen, FaHandHolding, FaExclamationCircle } from 'react-icons/fa';
 import ActionButton from '@/Components/ActionButton';
 
 export default function Dashboard() {
@@ -30,6 +30,7 @@ function DashboardContent() {
             description: 'Noise-cancelling',
             category: 'Electronics',
             location: 'Living Room',
+            status: 'lent',
             dateAdded: '2023-10-02',
         },
         { id: 4, name: 'Coffee Mug', description: 'Ceramic mug', category: 'Kitchenware', location: 'Kitchen', dateAdded: '2023-09-30' },
@@ -49,8 +50,8 @@ function DashboardContent() {
     }, [searchQuery]);
 
     const totalItems = items.length;
-    const uniqueCategories = [...new Set(items.map((item) => item.category))];
-    const uniqueLocations = [...new Set(items.map((item) => item.location))];
+    const lentOutItems = items.filter((item) => item.status === 'lent');
+    const itemsNeedingRestock = items.filter((item) => item.dateAdded < '2023-09-01');
 
     const locations = [
         { name: 'Office', capacity: 10, itemsStored: 2 },
@@ -64,17 +65,19 @@ function DashboardContent() {
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     <StatsCard title="Total Items" value={totalItems} icon={<FaBoxOpen />} bgColor="from-indigo-400 to-indigo-500" />
+                    {/* Lent Out Items */}
                     <StatsCard
-                        title="Categories"
-                        value={uniqueCategories.length}
-                        icon={<FaTag />}
-                        bgColor="from-indigo-400 to-indigo-500"
+                        title="Lent Out Items"
+                        value={lentOutItems.length}
+                        icon={<FaHandHolding />}
+                        bgColor="from-orange-400 to-orange-500"
                     />
+                    {/* Items Needing Attention */}
                     <StatsCard
-                        title="Locations"
-                        value={uniqueLocations.length}
-                        icon={<FaWarehouse />}
-                        bgColor="from-indigo-400 to-indigo-500"
+                        title="Items Needing Restock"
+                        value={itemsNeedingRestock.length}
+                        icon={<FaExclamationCircle />}
+                        bgColor="from-red-400 to-red-500"
                     />
                 </div>
             </div>
