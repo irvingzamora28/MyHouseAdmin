@@ -61,23 +61,19 @@ function DashboardContent() {
 
     return (
         <div className="py-6">
+            <div className=" bg-indigo-400"></div>
+            <div className=" bg-orange-400"></div>
+            <div className=" bg-red-400"></div>
             {/* Quick Stats Cards */}
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    <StatsCard title="Total Items" value={totalItems} icon={<FaBoxOpen />} bgColor="from-indigo-400 to-indigo-500" />
-                    {/* Lent Out Items */}
-                    <StatsCard
-                        title="Lent Out Items"
-                        value={lentOutItems.length}
-                        icon={<FaHandHolding />}
-                        bgColor="from-orange-400 to-orange-500"
-                    />
-                    {/* Items Needing Attention */}
+                    <StatsCard title="Total Items" icon={<FaBoxOpen />} bgColor="indigo-400" indicator={totalItems} />
+                    <StatsCard title="Lent Out Items" icon={<FaHandHolding />} bgColor="indigo-400" indicator={lentOutItems.length} />
                     <StatsCard
                         title="Items Needing Restock"
-                        value={itemsNeedingRestock.length}
                         icon={<FaExclamationCircle />}
-                        bgColor="from-red-400 to-red-500"
+                        bgColor="red-400"
+                        indicator={itemsNeedingRestock.length}
                     />
                 </div>
             </div>
