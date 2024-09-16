@@ -1,9 +1,10 @@
-import { useState, PropsWithChildren, ReactNode } from 'react';
+import { useState, PropsWithChildren, ReactNode, useEffect } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { HiMenu, HiX, HiChevronDown } from 'react-icons/hi';
+import { FaSun, FaMoon } from 'react-icons/fa';
 import Sidebar from '@/Components/Sidebar';
 import { SearchContext } from '@/Contexts/SearchContext';
 
@@ -11,10 +12,31 @@ export default function Authenticated({ header, children }: PropsWithChildren<{ 
     const user = usePage().props.auth.user;
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
+    // On component mount, check for the theme preference in localStorage
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            setIsDarkMode(true);
+            document.documentElement.classList.add('dark');
+        }
+    }, []);
+
+    // Toggle between dark and light modes
+    const toggleDarkMode = () => {
+        setIsDarkMode(!isDarkMode);
+        if (!isDarkMode) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    };
     return (
         <SearchContext.Provider value={{ searchQuery, setSearchQuery }}>
-            <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex">
+            <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
                 {/* Sidebar */}
                 <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} user={user} />
 
@@ -83,6 +105,14 @@ export default function Authenticated({ header, children }: PropsWithChildren<{ 
                                             </Dropdown>
                                         </div>
                                     </div>
+
+                                    {/* Dark Mode Toggle Button */}
+                                    <button
+                                        onClick={toggleDarkMode}
+                                        className="focus:outline-none text-gray-600 dark:text-gray-300 ml-4 mr-2"
+                                    >
+                                        {isDarkMode ? <FaSun className="w-4 h-4" /> : <FaMoon className="w-4 h-4" />}
+                                    </button>
 
                                     {/* Toggle button for sidebar (small screens) */}
                                     <div className="lg:hidden flex items-center ml-2">
