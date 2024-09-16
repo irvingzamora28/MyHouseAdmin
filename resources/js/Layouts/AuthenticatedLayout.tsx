@@ -54,7 +54,7 @@ export default function Authenticated({ header, children }: PropsWithChildren<{ 
                                             placeholder="Search..."
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
-                                            className="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-white"
+                                            className="px-2 py-1 border border-gray-300 rounded-md dark:bg-gray-700 dark:text-white"
                                         />
                                     </form>
 

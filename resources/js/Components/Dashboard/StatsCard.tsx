@@ -9,7 +9,7 @@ interface StatsCardProps {
 
 export default function StatsCard({ title, value, icon, bgColor }: StatsCardProps) {
     return (
-        <div className={`bg-gradient-to-r ${bgColor} text-white shadow-md rounded-lg overflow-hidden`}>
+        <div className={`bg-gradient-to-r ${bgColor} text-white shadow-card rounded-lg overflow-hidden`}>
             <div className="p-6">
                 <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold flex items-center">
