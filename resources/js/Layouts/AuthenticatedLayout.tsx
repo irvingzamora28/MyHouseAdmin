@@ -17,7 +17,7 @@ export default function Authenticated({ header, children }: PropsWithChildren<{ 
                     isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
                 } transition-transform duration-300 ease-in-out w-64 z-30`}
             >
-                <nav className="mt-10">
+                <nav className="mt-16">
                     <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                         Dashboard
                     </ResponsiveNavLink>
