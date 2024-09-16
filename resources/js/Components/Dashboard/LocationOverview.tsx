@@ -46,7 +46,7 @@ export default function LocationOverview({ locations, searchQuery, filteredItems
                                 {locations.map((location, index) => (
                                     <li key={index} className="mb-4">
                                         <h4 className="font-semibold">{location.name}</h4>
-                                        <p>
+                                        <p className="text-gray-500">
                                             Items Stored: {location.itemsStored} / {location.capacity}
                                         </p>
                                     </li>

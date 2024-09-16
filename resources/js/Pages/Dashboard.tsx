@@ -63,13 +63,18 @@ function DashboardContent() {
             {/* Quick Stats Cards */}
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    <StatsCard title="Total Items" value={totalItems} icon={<FaBoxOpen />} bgColor="from-blue-500 to-blue-600" />
-                    <StatsCard title="Categories" value={uniqueCategories.length} icon={<FaTag />} bgColor="from-green-500 to-green-600" />
+                    <StatsCard title="Total Items" value={totalItems} icon={<FaBoxOpen />} bgColor="from-indigo-400 to-indigo-500" />
+                    <StatsCard
+                        title="Categories"
+                        value={uniqueCategories.length}
+                        icon={<FaTag />}
+                        bgColor="from-indigo-400 to-indigo-500"
+                    />
                     <StatsCard
                         title="Locations"
                         value={uniqueLocations.length}
                         icon={<FaWarehouse />}
-                        bgColor="from-yellow-500 to-yellow-600"
+                        bgColor="from-indigo-400 to-indigo-500"
                     />
                 </div>
             </div>
