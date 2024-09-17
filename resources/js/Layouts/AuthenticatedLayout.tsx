@@ -10,16 +10,22 @@ import { SearchContext } from '@/Contexts/SearchContext';
 
 export default function Authenticated({ header, children }: PropsWithChildren<{ header?: ReactNode }>) {
     const user = usePage().props.auth.user;
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
     const [isDarkMode, setIsDarkMode] = useState(false);
 
-    // On component mount, check for the theme preference in localStorage
+    // On component mount, check for the theme and sidebar open state in localStorage
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
+        const savedSidebarState = localStorage.getItem('isSidebarOpen');
+
         if (savedTheme === 'dark') {
             setIsDarkMode(true);
             document.documentElement.classList.add('dark');
+        }
+
+        if (savedSidebarState === 'true') {
+            setIsSidebarOpen(true);
         }
     }, []);
 
@@ -34,6 +40,14 @@ export default function Authenticated({ header, children }: PropsWithChildren<{ 
             localStorage.setItem('theme', 'light');
         }
     };
+
+    // Toggle sidebar open state and store it in localStorage
+    const toggleSidebar = () => {
+        const newSidebarState = !isSidebarOpen;
+        setIsSidebarOpen(newSidebarState);
+        localStorage.setItem('isSidebarOpen', newSidebarState.toString()); // Store as string 'true' or 'false'
+    };
+
     return (
         <SearchContext.Provider value={{ searchQuery, setSearchQuery }}>
             <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -50,7 +64,7 @@ export default function Authenticated({ header, children }: PropsWithChildren<{ 
                                     {/* Toggle button for sidebar (large screens) */}
                                     <button
                                         className="hidden text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none lg:block lg:ml-8 lg:mr-8"
-                                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                                        onClick={toggleSidebar}
                                     >
                                         {isSidebarOpen ? null : <HiMenu className="h-6 w-6" />}
                                     </button>
@@ -118,7 +132,7 @@ export default function Authenticated({ header, children }: PropsWithChildren<{ 
                                     <div className="lg:hidden flex items-center ml-2">
                                         <button
                                             className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none"
-                                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                                            onClick={toggleSidebar}
                                         >
                                             {isSidebarOpen ? <HiX className="h-6 w-6" /> : <HiMenu className="h-6 w-6" />}
                                         </button>
