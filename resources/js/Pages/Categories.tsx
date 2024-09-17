@@ -73,8 +73,8 @@ export default function Categories() {
                             <table className="min-w-full text-gray-800 dark:text-gray-200">
                                 <thead>
                                     <tr>
-                                        <th className="px-4 py-2">#</th>
-                                        <th className="px-4 py-2">Name</th>
+                                        <th className="px-4 py-2 text-start">#</th>
+                                        <th className="px-4 py-2 text-start">Name</th>
                                         <th className="px-4 py-2">Actions</th>
                                     </tr>
                                 </thead>
