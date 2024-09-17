@@ -6,11 +6,11 @@ import { HiX } from 'react-icons/hi';
 
 interface SidebarProps {
     isSidebarOpen: boolean;
-    setIsSidebarOpen: (open: boolean) => void;
+    toggleSidebar: () => void;
     user: { name: string };
 }
 
-export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, user }: SidebarProps): ReactElement {
+export default function Sidebar({ isSidebarOpen, toggleSidebar, user }: SidebarProps): ReactElement {
     return (
         <div
             className={`fixed inset-y-0 left-0 bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 transform ${
@@ -21,7 +21,7 @@ export default function Sidebar({ isSidebarOpen, setIsSidebarOpen, user }: Sideb
             <div className="absolute top-0 right-0 m-4">
                 <button
                     className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none"
-                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    onClick={() => toggleSidebar()}
                 >
                     {isSidebarOpen ? (
                         <div className="hidden lg:block">
