@@ -7,7 +7,7 @@ use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
-use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
@@ -35,23 +35,26 @@ class CategoryController extends Controller
     }
 
     // Store a new category
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreCategoryRequest $request): RedirectResponse
     {
         $category = $this->categoryService->storeCategory($request->validated());
-        return new CategoryResource($category);
+
+        // Use Inertia redirect with a flash message if necessary
+        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
 
-    // Update an existing category
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
     {
         $updatedCategory = $this->categoryService->updateCategory($category, $request->validated());
-        return new CategoryResource($updatedCategory);
+
+        // Use Inertia redirect with a flash message if necessary
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
 
     // Delete a category (soft delete)
     public function destroy(Category $category)
     {
         $this->categoryService->deleteCategory($category);
-        return response()->json(['message' => 'Category deleted successfully.'], Response::HTTP_OK);
+        return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
     }
 }

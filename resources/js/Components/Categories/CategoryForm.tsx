@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useForm } from '@inertiajs/react';
 import ActionButton from '../ActionButton';
 
 interface Category {
@@ -8,26 +8,34 @@ interface Category {
 
 interface CategoryFormProps {
     category?: Category;
-    categories: Category[];
-    setCategories: (categories: Category[]) => void;
     closeModal: () => void;
 }
 
-export default function CategoryForm({ category, categories, setCategories, closeModal }: CategoryFormProps) {
-    const [name, setName] = useState(category ? category.name : ''); // Category name state
+export default function CategoryForm({ category, closeModal }: CategoryFormProps) {
+    const { data, setData, post, put, errors, reset } = useForm({
+        name: category ? category.name : '',
+    });
 
-    // Handle form submission for adding or editing category
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         if (category) {
-            // Edit existing category
-            setCategories(categories.map((cat) => (cat.id === category.id ? { ...cat, name } : cat)));
+            // Update existing category
+            put(route('categories.update', category.id), {
+                onSuccess: () => {
+                    reset();
+                    closeModal();
+                },
+            });
         } else {
-            // Add new category
-            const newCategory = { id: categories.length + 1, name };
-            setCategories([...categories, newCategory]);
+            // Create new category
+            post(route('categories.store'), {
+                onSuccess: () => {
+                    reset();
+                    closeModal();
+                },
+            });
         }
-        closeModal(); // Close modal after submission
     };
 
     return (
@@ -36,11 +44,14 @@ export default function CategoryForm({ category, categories, setCategories, clos
                 <label className="block text-gray-700 dark:text-gray-300 mb-2">Category Name</label>
                 <input
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    name="name"
+                    value={data.name}
+                    placeholder="Name"
+                    onChange={(e) => setData('name', e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
                     required
                 />
+                {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>} {/* Display validation error */}
             </div>
 
             <div className="flex justify-end">

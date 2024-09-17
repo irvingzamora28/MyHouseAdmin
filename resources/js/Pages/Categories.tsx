@@ -104,12 +104,7 @@ export default function Categories({ categories }: { categories: Category[] }) {
 
             {/* Add/Edit Category Modal */}
             <Modal show={showModal} onClose={() => setShowModal(false)} maxWidth="md">
-                <CategoryForm
-                    category={editCategory}
-                    categories={categories}
-                    setCategories={() => {}} // Handle updates here
-                    closeModal={() => setShowModal(false)}
-                />
+                <CategoryForm category={editCategory} closeModal={() => setShowModal(false)} />
             </Modal>
         </AuthenticatedLayout>
     );
