@@ -8,6 +8,7 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\Response;
+use Inertia\Inertia;
 
 class CategoryController extends Controller
 {
@@ -18,11 +19,12 @@ class CategoryController extends Controller
         $this->categoryService = $categoryService;
     }
 
-    // Get all categories for the authenticated user
     public function index()
     {
         $categories = $this->categoryService->getAllCategories();
-        return CategoryResource::collection($categories);
+        return Inertia::render('Categories', [
+            'categories' => CategoryResource::collection($categories)->toArray(request()),
+        ]);
     }
 
     // Get a single category

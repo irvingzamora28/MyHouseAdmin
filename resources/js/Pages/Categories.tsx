@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+
 import Modal from '@/Components/Modal'; // Use the Laravel Breeze Modal
 import ActionButton from '@/Components/ActionButton';
 import CategoryForm from '@/Components/Categories/CategoryForm';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { router } from '@inertiajs/react';
 
 import React, { PropsWithChildren } from 'react';
 
@@ -32,13 +34,7 @@ interface Category {
     name: string;
 }
 
-export default function Categories() {
-    const [categories, setCategories] = useState<Category[]>([
-        { id: 1, name: 'Electronics' },
-        { id: 2, name: 'Furniture' },
-        { id: 3, name: 'Kitchenware' },
-    ]);
-
+export default function Categories({ categories }: { categories: Category[] }) {
     const [showModal, setShowModal] = useState(false); // For handling the form modal
     const [editCategory, setEditCategory] = useState<Category | undefined>(); // For editing existing categories
 
@@ -53,7 +49,7 @@ export default function Categories() {
     };
 
     const handleDeleteCategory = (categoryId: number) => {
-        setCategories(categories.filter((category) => category.id !== categoryId));
+        router.delete(route('categories.destroy', categoryId));
     };
 
     return (
@@ -79,25 +75,26 @@ export default function Categories() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {categories.map((category) => (
-                                        <tr key={category.id}>
-                                            <td className="px-4 py-2">{category.id}</td>
-                                            <td className="px-4 py-2">{category.name}</td>
-                                            <td className="px-4 py-2">
-                                                <div className="flex space-x-4 justify-center">
-                                                    <IconButton
-                                                        icon={<FaEdit className="text-yellow-500" />}
-                                                        onClick={() => handleEditCategory(category)}
-                                                        className="mr-2"
-                                                    />
-                                                    <IconButton
-                                                        icon={<FaTrash className="text-red-500" />}
-                                                        onClick={() => handleDeleteCategory(category.id)}
-                                                    />
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {categories &&
+                                        categories.map((category) => (
+                                            <tr key={category.id}>
+                                                <td className="px-4 py-2">{category.id}</td>
+                                                <td className="px-4 py-2">{category.name}</td>
+                                                <td className="px-4 py-2">
+                                                    <div className="flex space-x-4 justify-center">
+                                                        <IconButton
+                                                            icon={<FaEdit className="text-yellow-500" />}
+                                                            onClick={() => handleEditCategory(category)}
+                                                            className="mr-2"
+                                                        />
+                                                        <IconButton
+                                                            icon={<FaTrash className="text-red-500" />}
+                                                            onClick={() => handleDeleteCategory(category.id)}
+                                                        />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
                                 </tbody>
                             </table>
                         </div>
@@ -110,7 +107,7 @@ export default function Categories() {
                 <CategoryForm
                     category={editCategory}
                     categories={categories}
-                    setCategories={setCategories}
+                    setCategories={() => {}} // Handle updates here
                     closeModal={() => setShowModal(false)}
                 />
             </Modal>
