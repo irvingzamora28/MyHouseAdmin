@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
-
-import Modal from '@/Components/Modal'; // Use the Laravel Breeze Modal
+import Modal from '@/Components/Modal';
 import ActionButton from '@/Components/ActionButton';
 import LocationForm from '@/Components/Locations/LocationForm';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import React, { PropsWithChildren } from 'react';
 import { Location } from '@/types';
 
@@ -34,6 +33,26 @@ export default function Locations({ locations }: { locations: Location[] }) {
     const [showModal, setShowModal] = useState(false);
     const [editLocation, setEditLocation] = useState<Location | undefined>();
 
+    // Search, Pagination State, and Pagination Size
+    const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [locationsPerPage, setLocationsPerPage] = useState(5);
+    const [filteredLocations, setFilteredLocations] = useState<Location[]>([]);
+
+    useEffect(() => {
+        const filtered = locations.filter(
+            (location) =>
+                location.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                location.description?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredLocations(filtered);
+    }, [searchQuery, locations]);
+
+    const indexOfLastLocation = currentPage * locationsPerPage;
+    const indexOfFirstLocation = indexOfLastLocation - locationsPerPage;
+    const currentLocations = filteredLocations.slice(indexOfFirstLocation, indexOfLastLocation);
+    const totalPages = Math.ceil(filteredLocations.length / locationsPerPage);
+
     const handleAddLocation = () => {
         setShowModal(true);
         setEditLocation(undefined);
@@ -48,6 +67,28 @@ export default function Locations({ locations }: { locations: Location[] }) {
         router.delete(route('locations.destroy', locationId));
     };
 
+    const paginate = (pageNumber: number) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+        }
+    };
+
+    const handleLocationsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setLocationsPerPage(Number(event.target.value));
+        setCurrentPage(1);
+    };
+
+    const getPaginationRange = () => {
+        const range: number[] = [];
+        const start = Math.max(1, currentPage - 2);
+        const end = Math.min(totalPages, currentPage + 2);
+
+        for (let i = start; i <= end; i++) {
+            range.push(i);
+        }
+        return range;
+    };
+
     return (
         <AuthenticatedLayout header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Locations</h2>}>
             <Head title="Locations" />
@@ -55,14 +96,38 @@ export default function Locations({ locations }: { locations: Location[] }) {
             <div className="py-6">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Location List</h3>
-                            <ActionButton
-                                label="Add Location"
-                                onClick={handleAddLocation}
-                                className="bg-indigo-500 hover:bg-indigo-600"
-                                dataTestId="add-location-modal-button"
-                            />
+                        {/* Title, Search, Select, and Button in the Same Row on Desktop */}
+                        <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4 space-y-4 md:space-y-0">
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200">Location Settings</h3>
+
+                            <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-2 w-full md:w-auto">
+                                <input
+                                    type="text"
+                                    className="w-full md:w-auto border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Search..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                                <div className="flex space-x-2 w-full md:w-auto">
+                                    <div className="relative w-full md:w-auto">
+                                        <select
+                                            className="block w-full md:w-auto px-4 py-2 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8"
+                                            value={locationsPerPage}
+                                            onChange={handleLocationsPerPageChange}
+                                        >
+                                            <option value={5}>Show 5</option>
+                                            <option value={10}>Show 10</option>
+                                            <option value={20}>Show 20</option>
+                                        </select>
+                                    </div>
+                                    <ActionButton
+                                        label="Create New"
+                                        onClick={handleAddLocation}
+                                        dataTestId="add-location-modal-button"
+                                        className="flex items-center w-full md:w-auto justify-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         {/* Responsive Table */}
@@ -78,8 +143,8 @@ export default function Locations({ locations }: { locations: Location[] }) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {locations &&
-                                        locations.map((location) => (
+                                    {currentLocations.length > 0 ? (
+                                        currentLocations.map((location) => (
                                             <tr key={location.id}>
                                                 <td className="px-4 py-2">{location.id}</td>
                                                 <td className="px-4 py-2">{location.name}</td>
@@ -103,9 +168,86 @@ export default function Locations({ locations }: { locations: Location[] }) {
                                                     </div>
                                                 </td>
                                             </tr>
-                                        ))}
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={5} className="text-center py-4">
+                                                No locations found.
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
+                        </div>
+
+                        {/* Modern Pagination with Dots and Disabled Arrows */}
+                        <div className="mt-4 flex justify-center space-x-2">
+                            {/* Left Arrow */}
+                            <button
+                                onClick={() => paginate(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className={`px-4 py-2 rounded-md border ${
+                                    currentPage === 1
+                                        ? 'bg-gray-300 dark:bg-gray-600 text-gray-400 cursor-not-allowed'
+                                        : 'bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
+                                }`}
+                            >
+                                <FaChevronLeft />
+                            </button>
+
+                            {/* First Page */}
+                            {currentPage > 3 && (
+                                <>
+                                    <button
+                                        onClick={() => paginate(1)}
+                                        className="px-4 py-2 rounded-md border bg-gray-200 dark:bg-gray-700 dark:text-gray-300"
+                                    >
+                                        1
+                                    </button>
+                                    <span className="px-2 py-2">...</span>
+                                </>
+                            )}
+
+                            {/* Page Numbers */}
+                            {getPaginationRange().map((pageNumber) => (
+                                <button
+                                    key={pageNumber}
+                                    onClick={() => paginate(pageNumber)}
+                                    className={`px-4 py-2 rounded-md border ${
+                                        currentPage === pageNumber
+                                            ? 'bg-indigo-500 text-white'
+                                            : 'bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
+                                    }`}
+                                >
+                                    {pageNumber}
+                                </button>
+                            ))}
+
+                            {/* Last Page */}
+                            {currentPage < totalPages - 2 && (
+                                <>
+                                    <span className="px-2 py-2">...</span>
+                                    <button
+                                        onClick={() => paginate(totalPages)}
+                                        className="px-4 py-2 rounded-md border bg-gray-200 dark:bg-gray-700 dark:text-gray-300"
+                                    >
+                                        {totalPages}
+                                    </button>
+                                </>
+                            )}
+
+                            {/* Right Arrow */}
+                            <button
+                                onClick={() => paginate(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                                className={`px-4 py-2 rounded-md border ${
+                                    currentPage === totalPages
+                                        ? 'bg-gray-300 dark:bg-gray-600 text-gray-400 cursor-not-allowed'
+                                        : 'bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
+                                }`}
+                            >
+                                <FaChevronRight />
+                            </button>
                         </div>
                     </div>
                 </div>
