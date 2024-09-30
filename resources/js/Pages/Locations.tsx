@@ -55,7 +55,7 @@ export default function Locations({ locations }: { locations: Location[] }) {
             <div className="py-6">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
-                        <div className="flex justify-between mb-4">
+                        <div className="flex justify-between items-center mb-4">
                             <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Location List</h3>
                             <ActionButton
                                 label="Add Location"
@@ -65,16 +65,16 @@ export default function Locations({ locations }: { locations: Location[] }) {
                             />
                         </div>
 
-                        {/* Locations Table */}
+                        {/* Responsive Table */}
                         <div className="overflow-x-auto">
                             <table className="min-w-full text-gray-800 dark:text-gray-200">
                                 <thead>
                                     <tr>
                                         <th className="px-4 py-2 text-start">#</th>
                                         <th className="px-4 py-2 text-start">Name</th>
-                                        <th className="px-4 py-2 text-start">Description</th>
-                                        <th className="px-4 py-2 text-start">Parent Location</th>
-                                        <th className="px-4 py-2">Actions</th>
+                                        <th className="px-4 py-2 hidden sm:table-cell text-start">Description</th>
+                                        <th className="px-4 py-2 hidden md:table-cell text-start">Parent Location</th>
+                                        <th className="px-4 py-2 text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -83,10 +83,9 @@ export default function Locations({ locations }: { locations: Location[] }) {
                                             <tr key={location.id}>
                                                 <td className="px-4 py-2">{location.id}</td>
                                                 <td className="px-4 py-2">{location.name}</td>
-                                                <td className="px-4 py-2">{location.description || 'N/A'}</td>
-                                                <td className="px-4 py-2">
-                                                    {location.parent ? location.parent.name : 'No Parent'}{' '}
-                                                    {/* Display parent name or 'No Parent' */}
+                                                <td className="px-4 py-2 hidden sm:table-cell">{location.description || 'N/A'}</td>
+                                                <td className="px-4 py-2 hidden md:table-cell">
+                                                    {location.parent ? location.parent.name : 'No Parent'}
                                                 </td>
                                                 <td className="px-4 py-2">
                                                     <div className="flex space-x-4 justify-center">
