@@ -12,6 +12,15 @@ export interface Category {
     name: string;
 }
 
+export interface Location {
+    id: number;
+    name: string;
+    description?: string;
+    parent_id?: number;
+    parent?: Location;
+    children?: Location[];
+}
+
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
         user: User;

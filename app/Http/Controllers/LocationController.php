@@ -7,7 +7,9 @@ use App\Http\Requests\UpdateLocationRequest;
 use App\Http\Resources\LocationResource;
 use App\Models\Location;
 use App\Services\LocationService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Inertia\Inertia;
 
 class LocationController extends Controller
 {
@@ -22,7 +24,18 @@ class LocationController extends Controller
     public function index()
     {
         $locations = $this->locationService->getAllLocations();
-        return LocationResource::collection($locations);
+
+        return Inertia::render('Locations', [
+            'locations' => $locations,
+        ]);
+    }
+
+    public function getValidParentLocations(Request $request)
+    {
+        $locationId = $request->input('locationId');
+        $parentLocations = $this->locationService->getValidParentLocations($locationId);
+
+        return response()->json($parentLocations);
     }
 
     // Get a single location
@@ -36,20 +49,20 @@ class LocationController extends Controller
     public function store(StoreLocationRequest $request)
     {
         $location = $this->locationService->storeLocation($request->validated());
-        return new LocationResource($location);
+        return redirect()->route('locations.index')->with('success', 'Category created successfully.');
     }
 
     // Update an existing location
     public function update(UpdateLocationRequest $request, Location $location)
     {
         $updatedLocation = $this->locationService->updateLocation($location, $request->validated());
-        return new LocationResource($updatedLocation);
+        return redirect()->route('locations.index')->with('success', 'Location updated successfully.');
     }
 
     // Delete a location (soft delete)
     public function destroy(Location $location)
     {
         $this->locationService->deleteLocation($location);
-        return response()->json(['message' => 'Location deleted successfully.'], Response::HTTP_OK);
+        return redirect()->route('locations.index')->with('success', 'Location deleted successfully.');
     }
 }
