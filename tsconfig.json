@@ -16,5 +16,6 @@
             "ziggy-js": ["./vendor/tightenco/ziggy"]
         }
     },
+    "types": ["vitest", "node", "jest", "@testing-library/jest-dom"],
     "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/**/*.d.ts"]
 }

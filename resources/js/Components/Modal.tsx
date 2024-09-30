@@ -32,6 +32,7 @@ export default function Modal({
             <Dialog
                 as="div"
                 id="modal"
+                role="dialog"
                 className="fixed inset-0 flex overflow-y-auto px-4 py-6 sm:px-0 items-center z-50 transform transition-all"
                 onClose={close}
             >

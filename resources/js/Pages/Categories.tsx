@@ -17,12 +17,14 @@ interface ButtonProps {
     className?: string; // Extra classes
     type?: 'button' | 'submit'; // Button type
     color?: string; // Text (icon) color
+    name?: string; // Button name
 }
-const IconButton = ({ icon, onClick, className, type = 'button', color = 'gray-500' }: PropsWithChildren<ButtonProps>) => {
+const IconButton = ({ icon, onClick, className, type = 'button', color = 'gray-500', name = '' }: PropsWithChildren<ButtonProps>) => {
     return (
         <button
             type={type}
             onClick={onClick}
+            aria-label={name}
             className={`text-${color} hover:text-${color} focus:outline-none transition ease-in-out duration-150 ${className}`}
         >
             {icon}
@@ -57,7 +59,12 @@ export default function Categories({ categories }: { categories: Category[] }) {
                     <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
                         <div className="flex justify-between mb-4">
                             <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Category List</h3>
-                            <ActionButton label="Add Category" onClick={handleAddCategory} className="bg-indigo-500 hover:bg-indigo-600" />
+                            <ActionButton
+                                label="Add Category"
+                                onClick={handleAddCategory}
+                                className="bg-indigo-500 hover:bg-indigo-600"
+                                dataTestId="add-category-modal-button"
+                            />
                         </div>
 
                         {/* Categories Table */}
@@ -82,10 +89,12 @@ export default function Categories({ categories }: { categories: Category[] }) {
                                                             icon={<FaEdit className="text-yellow-500" />}
                                                             onClick={() => handleEditCategory(category)}
                                                             className="mr-2"
+                                                            name="Edit"
                                                         />
                                                         <IconButton
                                                             icon={<FaTrash className="text-red-500" />}
                                                             onClick={() => handleDeleteCategory(category.id)}
+                                                            name="Delete"
                                                         />
                                                     </div>
                                                 </td>

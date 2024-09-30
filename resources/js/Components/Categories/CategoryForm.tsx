@@ -56,7 +56,11 @@ export default function CategoryForm({ category, closeModal }: CategoryFormProps
 
             <div className="flex justify-end">
                 <ActionButton label="Cancel" onClick={closeModal} className="mr-2 bg-gray-500 hover:bg-gray-600" />
-                <ActionButton label={category ? 'Update Category' : 'Add Category'} className="bg-indigo-500 hover:bg-indigo-600" />
+                <ActionButton
+                    label={category ? 'Update Category' : 'Add Category'}
+                    className="bg-indigo-500 hover:bg-indigo-600"
+                    dataTestId="add-category-action-button"
+                />
             </div>
         </form>
     );
