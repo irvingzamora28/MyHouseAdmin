@@ -9,6 +9,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import { router } from '@inertiajs/react';
 
 import React, { PropsWithChildren } from 'react';
+import { Category } from '@/types';
 
 interface ButtonProps {
     icon: React.ReactNode; // The button will only show an icon
@@ -28,11 +29,6 @@ const IconButton = ({ icon, onClick, className, type = 'button', color = 'gray-5
         </button>
     );
 };
-
-interface Category {
-    id: number;
-    name: string;
-}
 
 export default function Categories({ categories }: { categories: Category[] }) {
     const [showModal, setShowModal] = useState(false); // For handling the form modal
