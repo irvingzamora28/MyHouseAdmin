@@ -27,7 +27,7 @@ export default function LocationForm({ location, closeModal }: LocationFormProps
         // Fetch valid parent locations when the modal opens
         const fetchParentLocations = async () => {
             try {
-                const response = await fetch(route('locations.parent-locations', { locationId: location?.id || '' }));
+                const response = await fetch(route('locations.parent-locations', location?.id ?? 0));
                 const result = await response.json();
                 setParentLocations(result);
             } catch (error) {

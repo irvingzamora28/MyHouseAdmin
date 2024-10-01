@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetValidParentLocationsRequest;
 use App\Http\Requests\StoreLocationRequest;
 use App\Http\Requests\UpdateLocationRequest;
 use App\Http\Resources\LocationResource;
@@ -30,7 +31,7 @@ class LocationController extends Controller
         ]);
     }
 
-    public function getValidParentLocations(Request $request)
+    public function getValidParentLocations(GetValidParentLocationsRequest $request)
     {
         $locationId = $request->input('locationId');
         $parentLocations = $this->locationService->getValidParentLocations($locationId);
