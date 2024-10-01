@@ -24,7 +24,7 @@ class GetValidParentLocationsRequest extends FormRequest
                 'nullable',
                 'integer',
                 function ($attribute, $value, $fail) {
-                    if (!Location::where('id', $value)->where('user_id', auth()->id())->exists()) {
+                    if (!Location::where('id', $value)->where('user_id', Auth::id())->exists()) {
                         $fail('The location does not belong to the authenticated user.');
                     }
                 }
