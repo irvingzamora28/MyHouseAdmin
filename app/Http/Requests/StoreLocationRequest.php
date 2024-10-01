@@ -29,7 +29,7 @@ class StoreLocationRequest extends FormRequest
                     }
                 },
             ],
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:1024',
         ];
     }
 
