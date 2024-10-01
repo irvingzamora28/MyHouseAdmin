@@ -103,7 +103,7 @@ export default function Locations({ locations }: { locations: Location[] }) {
                             <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-2 w-full md:w-auto">
                                 <input
                                     type="text"
-                                    className="w-full md:w-auto border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full md:w-auto border border-gray-300 p-2 rounded-lg focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     placeholder="Search..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -111,7 +111,7 @@ export default function Locations({ locations }: { locations: Location[] }) {
                                 <div className="flex space-x-2 w-full md:w-auto">
                                     <div className="relative w-full md:w-auto">
                                         <select
-                                            className="block w-full md:w-auto px-4 py-2 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8"
+                                            className="block w-full md:w-auto px-4 py-2 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none appearance-none pr-8 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                             value={locationsPerPage}
                                             onChange={handleLocationsPerPageChange}
                                         >
@@ -124,7 +124,7 @@ export default function Locations({ locations }: { locations: Location[] }) {
                                         label="Create New"
                                         onClick={handleAddLocation}
                                         dataTestId="add-location-modal-button"
-                                        className="flex items-center w-full md:w-auto justify-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="flex items-center w-full md:w-auto justify-center px-4 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary-dark focus:outline-none"
                                     />
                                 </div>
                             </div>
