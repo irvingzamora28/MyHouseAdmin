@@ -68,7 +68,7 @@ export default function LocationForm({ location, closeModal }: LocationFormProps
                     name="name"
                     value={data.name}
                     onChange={(e) => setData('name', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                    className={`w-full px-4 py-2 border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300`}
                     required
                 />
                 {errors.name && <span className="text-red-500 text-sm">{errors.name}</span>}
@@ -81,7 +81,7 @@ export default function LocationForm({ location, closeModal }: LocationFormProps
                     name="description"
                     value={data.description}
                     onChange={(e) => setData('description', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                    className={`w-full px-4 py-2 border ${errors.description ? 'border-red-500' : 'border-gray-300'} rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300`}
                 />
                 {errors.description && <span className="text-red-500 text-sm">{errors.description}</span>}
             </div>
@@ -93,7 +93,7 @@ export default function LocationForm({ location, closeModal }: LocationFormProps
                     name="parent_id"
                     value={data.parent_id || ''}
                     onChange={(e) => setData('parent_id', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300"
+                    className={`w-full px-4 py-2 border ${errors.parent_id ? 'border-red-500' : 'border-gray-300'} rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300`}
                 >
                     <option value="">No Parent</option>
                     {parentLocations.map((parentLocation) => (
