@@ -5,6 +5,18 @@ interface TableProps<T> {
 }
 
 const DynamicTable = <T extends object>({ data, columns, renderActions }: TableProps<T>) => {
+    const getDisplayValue = (value: any) => {
+        // If the value is an object, check for the 'name' property
+        if (typeof value === 'object' && value !== null) {
+            return value.name ?? 'Parent';
+        }
+        if (value === null) {
+            return '';
+        }
+        // If the value is not an object, display it as is
+        return String(value);
+    };
+
     return (
         <div className="overflow-x-auto">
             <table className="min-w-full text-gray-800 dark:text-gray-200">
@@ -24,7 +36,7 @@ const DynamicTable = <T extends object>({ data, columns, renderActions }: TableP
                             <tr key={rowIndex}>
                                 {columns.map((col, colIndex) => (
                                     <td key={colIndex} className="px-4 py-2">
-                                        {String(item[col])}
+                                        {getDisplayValue(item[col])}
                                     </td>
                                 ))}
                                 {renderActions && <td className="px-4 py-2 text-center">{renderActions(item)}</td>}
