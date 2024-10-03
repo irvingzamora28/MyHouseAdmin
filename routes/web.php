@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LocationTypeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,7 @@ Route::get('/locations/parent-locations', [LocationController::class, 'getValidP
 Route::post('/locations', [LocationController::class, 'store'])->middleware(['auth', 'verified'])->name('locations.store');
 Route::put('/locations/{location}', [LocationController::class, 'update'])->middleware(['auth', 'verified'])->name('locations.update');
 Route::delete('/locations/{location}', [LocationController::class, 'destroy'])->middleware(['auth', 'verified'])->name('locations.destroy');
+Route::get('/location-types', [LocationTypeController::class, 'index'])->middleware(['auth:sanctum', 'verified'])->name('locations.location-types');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

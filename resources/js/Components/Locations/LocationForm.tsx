@@ -4,13 +4,8 @@ import ActionButton from '../ActionButton';
 import TextInputField from '../Form/TextInputField';
 import TextareaField from '../Form/TextareaInputField';
 import SelectInputField from '../Form/SelectInputField';
-
-interface Location {
-    id: number;
-    name: string;
-    description?: string;
-    parent_id?: number;
-}
+import { Location, LocationType } from '@/types';
+import LocationTypeSelect from './LocationTypeSelect';
 
 interface LocationFormProps {
     location?: Location;
@@ -22,9 +17,11 @@ export default function LocationForm({ location, closeModal }: LocationFormProps
         name: location ? location.name : '',
         description: location ? location.description : '',
         parent_id: location ? location.parent_id : '',
+        location_type_id: location ? location.location_type_id : '',
     });
 
     const [parentLocations, setParentLocations] = useState<Location[]>([]);
+    const [locationTypes, setLocationTypes] = useState<LocationType[]>([]);
 
     useEffect(() => {
         const fetchParentLocations = async () => {
@@ -37,7 +34,18 @@ export default function LocationForm({ location, closeModal }: LocationFormProps
             }
         };
 
+        const fetchLocationTypes = async () => {
+            try {
+                const response = await fetch(route('locations.location-types'));
+                const result = await response.json();
+                setLocationTypes(result.data);
+            } catch (error) {
+                console.error('Error fetching location types:', error);
+            }
+        };
+
         fetchParentLocations();
+        fetchLocationTypes();
     }, [location]);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -79,6 +87,13 @@ export default function LocationForm({ location, closeModal }: LocationFormProps
                 value={data.description || ''}
                 onChange={(e) => setData('description', e.target.value)}
                 error={errors.description}
+            />
+
+            <LocationTypeSelect
+                locationTypes={locationTypes}
+                value={data.location_type_id ? Number(data.location_type_id) : ''}
+                onChange={(value) => setData('location_type_id', value)}
+                error={errors.location_type_id}
             />
 
             <SelectInputField

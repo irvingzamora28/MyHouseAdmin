@@ -9,7 +9,7 @@ class LocationService
 {
     public function getAllLocations()
     {
-        return Location::where('user_id', Auth::id())->with('parent')->with('children')->get();
+        return Location::where('user_id', Auth::id())->with('parent')->with('children')->with('locationType')->get();
     }
 
     public function getLocationById($id)

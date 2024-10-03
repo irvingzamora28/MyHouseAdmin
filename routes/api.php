@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LocationTypeController;
 use App\Http\Controllers\TagController;
 
 Route::get('/user', function (Request $request) {

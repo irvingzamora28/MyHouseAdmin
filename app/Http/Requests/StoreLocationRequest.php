@@ -29,6 +29,7 @@ class StoreLocationRequest extends FormRequest
                     }
                 },
             ],
+            'location_type_id' => 'required|exists:location_types,id',
             'description' => 'nullable|string|max:1024',
         ];
     }

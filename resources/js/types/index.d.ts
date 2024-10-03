@@ -17,8 +17,17 @@ export interface Location {
     name: string;
     description?: string;
     parent_id?: number;
+    location_type_id?: number;
+    location_type?: LocationType;
     parent?: Location;
     children?: Location[];
+}
+
+export interface LocationType {
+    id: number;
+    name: string;
+    icon_package: string;
+    icon_name: string;
 }
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
