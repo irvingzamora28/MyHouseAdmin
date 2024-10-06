@@ -48,9 +48,7 @@ export default function LocationForm({ location, closeModal }: LocationFormProps
         fetchLocationTypes();
     }, [location]);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
+    const handleUpdateOrAdd = () => {
         if (location) {
             put(route('locations.update', location.id), {
                 onSuccess: () => {
@@ -69,7 +67,7 @@ export default function LocationForm({ location, closeModal }: LocationFormProps
     };
 
     return (
-        <form onSubmit={handleSubmit} className="p-8">
+        <div className="p-8">
             <TextInputField
                 label="Location Name"
                 name="name"
@@ -107,8 +105,12 @@ export default function LocationForm({ location, closeModal }: LocationFormProps
 
             <div className="flex justify-end">
                 <ActionButton label="Cancel" onClick={closeModal} className="mr-2 bg-gray-500 hover:bg-gray-600" />
-                <ActionButton label={location ? 'Update Location' : 'Add Location'} className="bg-indigo-500 hover:bg-indigo-600" />
+                <ActionButton
+                    label={location ? 'Update Location' : 'Add Location'}
+                    onClick={handleUpdateOrAdd}
+                    className="bg-indigo-500 hover:bg-indigo-600"
+                />
             </div>
-        </form>
+        </div>
     );
 }
