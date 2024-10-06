@@ -30,6 +30,7 @@ class UpdateLocationRequest extends FormRequest
                 },
             ],
             'description' => 'nullable|string|max:1024',
+            'location_type_id' => 'nullable|exists:location_types,id',
         ];
     }
 

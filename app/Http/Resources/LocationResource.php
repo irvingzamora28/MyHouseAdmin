@@ -15,6 +15,7 @@ class LocationResource extends JsonResource
             'within' => new LocationResource($this->whenLoaded('parent')),
             'children' => LocationResource::collection($this->whenLoaded('children')),
             'location_type' => $this->locationType,
+            'location_type_id' => $this->location_type_id,
         ];
     }
 }
