@@ -23,6 +23,10 @@ export interface Location {
     children?: Location[];
 }
 
+export interface LocationsData {
+    data: Location[];
+}
+
 export interface LocationType {
     id: number;
     name: string;

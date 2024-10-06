@@ -12,11 +12,9 @@ class LocationResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'parent_id' => $this->parent_id,
-            'children' => LocationResource::collection($this->children),
-            'location_type'    => new LocationTypeResource($this->whenLoaded('locationType')),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'within' => new LocationResource($this->whenLoaded('parent')),
+            'children' => LocationResource::collection($this->whenLoaded('children')),
+            'location_type' => $this->locationType,
         ];
     }
 }

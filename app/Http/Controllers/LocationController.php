@@ -24,11 +24,18 @@ class LocationController extends Controller
     // Get all locations for the authenticated user
     public function index()
     {
-        $locations = $this->locationService->getAllLocations();
+        try {
+            $locations = $this->locationService->getAllLocations();
 
-        return Inertia::render('Locations', [
-            'locations' => $locations,
-        ]);
+            return Inertia::render('Locations', [
+                'locations' => $locations,
+            ]);
+        } catch (\Exception $e) {
+            // Handle exceptions and return an error message
+            return Inertia::render('Locations', [
+                'error' => 'Failed to load locations. Please try again.',
+            ]);
+        }
     }
 
     public function getValidParentLocations(GetValidParentLocationsRequest $request)

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\LocationResource;
 use App\Models\Location;
 use Illuminate\Support\Facades\Auth;
 
@@ -9,7 +10,12 @@ class LocationService
 {
     public function getAllLocations()
     {
-        return Location::where('user_id', Auth::id())->with('parent')->with('children')->with('locationType')->get();
+        $locations = Location::where('user_id', Auth::id())
+            ->with('parent')
+            ->with('children')
+            ->with('locationType')
+            ->get();
+        return LocationResource::collection($locations);
     }
 
     public function getLocationById($id)
@@ -52,7 +58,7 @@ class LocationService
             ->when($locationId, function ($query, $locationId) {
                 // Exclude the current location and its descendants
                 $query->where('id', '!=', $locationId)
-                      ->whereNotIn('id', $this->getDescendantIds($locationId));
+                    ->whereNotIn('id', $this->getDescendantIds($locationId));
             })
             ->get();
     }
