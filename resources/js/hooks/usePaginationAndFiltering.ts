@@ -9,7 +9,9 @@ export function usePaginationAndFiltering<T>(items: T[], filterFn: (item: T, que
     useEffect(() => {
         const filtered = items.filter((item) => filterFn(item, searchQuery));
         setFilteredItems(filtered);
-        setCurrentPage(1); // Reset to the first page on search
+        if (searchQuery) {
+            setCurrentPage(1); // Reset page on new search
+        }
     }, [searchQuery, items]);
 
     const indexOfLastItem = currentPage * itemsPerPageState;
