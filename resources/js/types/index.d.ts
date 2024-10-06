@@ -34,6 +34,13 @@ export interface LocationType {
     icon_name: string;
 }
 
+export interface Icon {
+    id: number;
+    name: string;
+    icon_package: string;
+    icon_name: string;
+}
+
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
         user: User;
