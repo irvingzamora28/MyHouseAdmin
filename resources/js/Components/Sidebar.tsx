@@ -39,10 +39,10 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar, user }: SidebarP
                     Dashboard
                 </ResponsiveNavLink>
 
-                <ResponsiveNavLink href={route('categories.index')} active={route().current('categories.index')} className="mt-4">
+                <ResponsiveNavLink href={route('categories.display')} active={route().current('categories.display')} className="mt-4">
                     Categories
                 </ResponsiveNavLink>
-                <ResponsiveNavLink href={route('locations.index')} active={route().current('locations.index')} className="mt-4">
+                <ResponsiveNavLink href={route('locations.display')} active={route().current('locations.display')} className="mt-4">
                     Locations
                 </ResponsiveNavLink>
                 <ResponsiveNavLink href={route('items.index')} active={route().current('items.index')} className="mt-4">

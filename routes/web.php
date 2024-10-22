@@ -21,12 +21,12 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/categories', [CategoryController::class, 'index'])->middleware(['auth', 'verified'])->name('categories.index');
+Route::get('/categories', [CategoryController::class, 'display'])->middleware(['auth', 'verified'])->name('categories.display');
 Route::post('/categories', [CategoryController::class, 'store'])->middleware(['auth', 'verified'])->name('categories.store');
 Route::put('/categories/{category}', [CategoryController::class, 'update'])->middleware(['auth', 'verified'])->name('categories.update');
 Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->middleware(['auth', 'verified'])->name('categories.destroy');
 
-Route::get('/locations', [LocationController::class, 'index'])->middleware(['auth', 'verified'])->name('locations.index');
+Route::get('/locations', [LocationController::class, 'display'])->middleware(['auth', 'verified'])->name('locations.display');
 Route::get('/locations/parent-locations', [LocationController::class, 'getValidParentLocations'])->middleware(['auth', 'verified'])->name('locations.parent-locations');
 Route::post('/locations', [LocationController::class, 'store'])->middleware(['auth', 'verified'])->name('locations.store');
 Route::put('/locations/{location}', [LocationController::class, 'update'])->middleware(['auth', 'verified'])->name('locations.update');

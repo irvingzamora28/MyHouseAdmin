@@ -23,6 +23,19 @@ export interface Location {
     children?: Location[];
 }
 
+export interface Item {
+    id: number;
+    name: string;
+    description?: string;
+    category_id?: number;
+    value?: string;
+    location_id?: number;
+    category?: Category;
+    location?: Location;
+    purchase_date?: string;
+    warranty_info?: string;
+}
+
 export interface LocationsData {
     data: Location[];
 }

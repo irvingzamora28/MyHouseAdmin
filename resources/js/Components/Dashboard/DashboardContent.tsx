@@ -1,11 +1,12 @@
-import React from 'react';
-import { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import LocationOverview from './LocationOverview';
 import RecentActivity from './RecentActivity';
 import StatsCard from './StatsCard';
 import { FaPlus, FaBoxOpen, FaHandHolding, FaExclamationCircle } from 'react-icons/fa';
 import ActionButton from '../ActionButton';
 import { SearchContext } from '../../Contexts/SearchContext';
+import Modal from '@/Components/Modal';
+import ItemForm from '@/Components/Items/ItemForm';
 
 export default function DashboardContent() {
     const { searchQuery } = useContext(SearchContext);
@@ -27,6 +28,8 @@ export default function DashboardContent() {
     ];
 
     const [filteredItems, setFilteredItems] = useState(items);
+    const [showItemModal, setShowItemModal] = useState(false); // State for modal visibility
+    const [editItem, setEditItem] = useState(undefined); // State to handle editing an item
 
     useEffect(() => {
         const results = items.filter(
@@ -49,12 +52,18 @@ export default function DashboardContent() {
         { name: 'Kitchen', capacity: 8, itemsStored: 1 },
     ];
 
+    const handleAddNewItem = () => {
+        setEditItem(undefined); // Reset the item being edited
+        setShowItemModal(true); // Show modal
+    };
+
+    const closeModal = () => {
+        setShowItemModal(false);
+    };
+
     return (
         <div className="py-6">
-            <div className=" bg-indigo-400"></div>
-            <div className=" bg-orange-400"></div>
-            <div className=" bg-red-400"></div>
-            {/* Quick Stats Cards */}
+            {/* Stats and content */}
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     <StatsCard title="Total Items" icon={<FaBoxOpen />} bgColor="indigo-400" indicator={totalItems} />
@@ -71,7 +80,7 @@ export default function DashboardContent() {
             {/* Main Content Area */}
             <div className="max-w-7xl mx-auto mt-6 sm:px-6 lg:px-8">
                 <div className="flex flex-col lg:flex-row lg:space-x-6">
-                    {/* Left Side - Locations or Search Results */}
+                    {/* Left Side */}
                     <div className="w-full lg:w-4/5">
                         <LocationOverview locations={locations} searchQuery={searchQuery} filteredItems={filteredItems} />
                     </div>
@@ -79,12 +88,17 @@ export default function DashboardContent() {
                     {/* Right Side - Quick Actions and Recent Activity */}
                     <div className="w-full lg:w-1/5 mt-6 lg:mt-0 ">
                         <div className="flex mb-6 justify-center">
-                            <ActionButton label="Add New Item" icon={<FaPlus />} className="w-full" />
+                            <ActionButton label="Add New Item" icon={<FaPlus />} className="w-full" onClick={handleAddNewItem} />
                         </div>
                         <RecentActivity items={items} />
                     </div>
                 </div>
             </div>
+
+            {/* Modal for Adding New Item */}
+            <Modal show={showItemModal} onClose={closeModal} maxWidth="md">
+                <ItemForm item={editItem} closeModal={closeModal} />
+            </Modal>
         </div>
     );
 }

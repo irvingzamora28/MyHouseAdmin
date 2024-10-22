@@ -21,8 +21,13 @@ class LocationController extends Controller
         $this->locationService = $locationService;
     }
 
-    // Get all locations for the authenticated user
     public function index()
+    {
+        $locations = $this->locationService->getAllLocations();
+        return LocationResource::collection($locations);
+    }
+
+    public function display()
     {
         try {
             $locations = $this->locationService->getAllLocations();

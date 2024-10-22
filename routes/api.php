@@ -7,13 +7,13 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LocationTypeController;
 use App\Http\Controllers\TagController;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', EnsureFrontendRequestsAreStateful::class])->group(function () {
     Route::apiResource('items', ItemController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('locations', LocationController::class);

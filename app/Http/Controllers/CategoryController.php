@@ -22,6 +22,12 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = $this->categoryService->getAllCategories();
+        return CategoryResource::collection($categories);
+    }
+
+    public function display()
+    {
+        $categories = $this->categoryService->getAllCategories();
         return Inertia::render('Categories', [
             'categories' => CategoryResource::collection($categories)->toArray(request()),
         ]);

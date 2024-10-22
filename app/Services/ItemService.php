@@ -22,6 +22,7 @@ class ItemService
     // Store a new item
     public function storeItem(array $data)
     {
+        $data['user_id'] = Auth::id();
         return Item::create($data);
     }
 

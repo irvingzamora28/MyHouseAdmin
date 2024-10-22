@@ -8,6 +8,7 @@ use App\Http\Resources\ItemResource;
 use App\Models\Item;
 use App\Services\ItemService;
 use Illuminate\Http\Response;
+use Inertia\Inertia;
 
 class ItemController extends Controller
 {
@@ -36,7 +37,7 @@ class ItemController extends Controller
     public function store(StoreItemRequest $request)
     {
         $item = $this->itemService->storeItem($request->validated());
-        return new ItemResource($item);
+        return redirect()->route('dashboard')->with('success', 'Item created successfully.');
     }
 
     // Update an existing item
