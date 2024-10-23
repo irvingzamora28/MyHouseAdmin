@@ -46,7 +46,7 @@ class CategoryController extends Controller
         $category = $this->categoryService->storeCategory($request->validated());
 
         // Use Inertia redirect with a flash message if necessary
-        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+        return redirect()->route('categories.display')->with('success', 'Category created successfully.');
     }
 
     public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
@@ -54,13 +54,13 @@ class CategoryController extends Controller
         $updatedCategory = $this->categoryService->updateCategory($category, $request->validated());
 
         // Use Inertia redirect with a flash message if necessary
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
+        return redirect()->route('categories.display')->with('success', 'Category updated successfully.');
     }
 
     // Delete a category (soft delete)
     public function destroy(Category $category)
     {
         $this->categoryService->deleteCategory($category);
-        return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+        return redirect()->route('categories.display')->with('success', 'Category deleted successfully.');
     }
 }

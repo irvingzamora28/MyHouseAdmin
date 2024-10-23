@@ -62,20 +62,20 @@ class LocationController extends Controller
     public function store(StoreLocationRequest $request)
     {
         $location = $this->locationService->storeLocation($request->validated());
-        return redirect()->route('locations.index')->with('success', 'Category created successfully.');
+        return redirect()->route('locations.display')->with('success', 'Category created successfully.');
     }
 
     // Update an existing location
     public function update(UpdateLocationRequest $request, Location $location)
     {
         $updatedLocation = $this->locationService->updateLocation($location, $request->validated());
-        return redirect()->route('locations.index')->with('success', 'Location updated successfully.');
+        return redirect()->route('locations.display')->with('success', 'Location updated successfully.');
     }
 
     // Delete a location (soft delete)
     public function destroy(Location $location)
     {
         $this->locationService->deleteLocation($location);
-        return redirect()->route('locations.index')->with('success', 'Location deleted successfully.');
+        return redirect()->route('locations.display')->with('success', 'Location deleted successfully.');
     }
 }
