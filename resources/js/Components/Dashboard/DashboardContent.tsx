@@ -7,6 +7,7 @@ import ActionButton from '../ActionButton';
 import { SearchContext } from '../../Contexts/SearchContext';
 import Modal from '@/Components/Modal';
 import ItemForm from '@/Components/Items/ItemForm';
+import { Link } from '@inertiajs/react';
 
 export default function DashboardContent() {
     const { searchQuery } = useContext(SearchContext);
@@ -87,9 +88,25 @@ export default function DashboardContent() {
 
                     {/* Right Side - Quick Actions and Recent Activity */}
                     <div className="w-full lg:w-1/5 mt-6 lg:mt-0 ">
-                        <div className="flex mb-6 justify-center">
-                            <ActionButton label="Add New Item" icon={<FaPlus />} className="w-full" onClick={handleAddNewItem} />
+                        <div className="flex flex-col mb-6 justify-center space-y-4">
+                            {/* Button for adding a new item manually */}
+                            <ActionButton
+                                label="Add New Item"
+                                icon={<FaPlus />}
+                                className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded"
+                                onClick={handleAddNewItem}
+                            />
+
+                            {/* Button for adding items via image recognition */}
+                            <Link href={route('image.upload')} className="w-full">
+                                <ActionButton
+                                    label="Add Items via Image"
+                                    icon={<FaPlus />}
+                                    className="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded"
+                                />
+                            </Link>
                         </div>
+
                         <RecentActivity items={items} />
                     </div>
                 </div>
