@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ImageProcessingController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\LocationTypeController;
 use App\Http\Controllers\ProfileController;
@@ -41,6 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/image-upload', function () {
         return Inertia::render('ImageUpload');
     })->middleware(['auth', 'verified'])->name('image.upload');
+
 });
+Route::post('/process-image', [ImageProcessingController::class, 'store'])
+    ->name('image.process');
 
 require __DIR__ . '/auth.php';

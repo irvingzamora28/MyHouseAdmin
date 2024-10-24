@@ -1,4 +1,3 @@
-// components/ImageUpload.tsx
 import React, { useCallback, useRef, useState } from 'react';
 import { BiCloudUpload, BiImage } from 'react-icons/bi';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
@@ -16,21 +15,34 @@ interface DragEventHTMLForm extends React.DragEvent<HTMLFormElement> {
     dataTransfer: DataTransfer;
 }
 
+interface ImageProcessResponse {
+    result: {
+        analysis: any; // Adjust this type based on your actual response structure
+    };
+}
+
 type ImageUploadProps = PageProps & {
     // Add any additional props here
 };
 
 export default function ImageUpload({}: ImageUploadProps): JSX.Element {
-    const { selectedImage, previewUrl, isUploading, error, handleImageSelect, reset } = useImageUpload({
+    const {
+        selectedImage,
+        previewUrl,
+        isUploading,
+        error: frontEndError,
+        handleImageSelect,
+        reset,
+    } = useImageUpload({
         maxSizeInMB: 10,
         allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
         onError: (error: FileError) => {
-            // You could integrate with your toast notification system here
             console.error(error.message);
         },
     });
 
     const [dragActive, setDragActive] = useState<boolean>(false);
+    const [validationErrors, setValidationErrors] = useState<string[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dropZoneRef = useRef<HTMLDivElement>(null);
 
@@ -66,23 +78,32 @@ export default function ImageUpload({}: ImageUploadProps): JSX.Element {
         formData.append('image', selectedImage);
 
         router.post('/process-image', formData, {
-            onSuccess: () => {
+            onSuccess: (response) => {
+                // First cast to unknown, then to ImageProcessResponse
+                const result = response as unknown as ImageProcessResponse;
                 reset();
-                alert('Image successfully processed');
+                console.log('Success:', result);
+
+                console.log('Analysis:', result.result.analysis);
             },
-            onError: () => {
-                alert('Failed to process the image');
+            onError: (errors) => {
+                // Assuming `errors` is an object with validation error messages
+                console.error('Validation Errors:', errors);
+                // Set the error state with the validation errors
+                setValidationErrors(Array.isArray(errors.image) ? errors.image : [errors.image || 'An unexpected error occurred.']);
             },
         });
     };
 
-    // Keyboard navigation for the dropzone
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             fileInputRef.current?.click();
         }
     };
+
+    // Combine front-end and back-end validation errors
+    const combinedErrors = frontEndError ? [frontEndError.message] : validationErrors;
 
     return (
         <AuthenticatedLayout
@@ -93,12 +114,21 @@ export default function ImageUpload({}: ImageUploadProps): JSX.Element {
                 <div className="max-w-3xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6">
+                            {combinedErrors.length > 0 && (
+                                <div className="mb-4 p-2 border border-red-500 bg-red-100 text-red-700">
+                                    <ul>
+                                        {combinedErrors.map((error, index) => (
+                                            <li key={index}>{error}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                             <form onSubmit={handleSubmit} className="space-y-6" aria-label="Image upload form">
                                 <div
                                     ref={dropZoneRef}
                                     className={`relative border-2 border-dashed rounded-lg transition-colors duration-200
                     ${dragActive ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' : 'border-gray-300 dark:border-gray-600'}
-                    ${error ? 'border-red-500' : ''}`}
+                    ${combinedErrors.length > 0 ? 'border-red-500' : ''}`}
                                     onDragEnter={handleDrag}
                                     onDragLeave={handleDrag}
                                     onDragOver={handleDrag}
@@ -132,7 +162,7 @@ export default function ImageUpload({}: ImageUploadProps): JSX.Element {
                                             </div>
                                         ) : (
                                             <div className="space-y-4">
-                                                {error ? (
+                                                {combinedErrors.length > 0 ? (
                                                     <MdError className="mx-auto h-12 w-12 text-red-500" />
                                                 ) : (
                                                     <BiCloudUpload className="mx-auto h-12 w-12 text-gray-400" />
@@ -140,11 +170,13 @@ export default function ImageUpload({}: ImageUploadProps): JSX.Element {
                                                 <div className="space-y-2">
                                                     <p
                                                         id="dropzone-description"
-                                                        className={`text-base ${error ? 'text-red-500' : 'text-gray-600 dark:text-gray-300'}`}
+                                                        className={`text-base ${combinedErrors.length > 0 ? 'text-red-500' : 'text-gray-600 dark:text-gray-300'}`}
                                                     >
-                                                        {error ? error.message : 'Drop your image here, or click to browse'}
+                                                        {combinedErrors.length > 0
+                                                            ? 'Please fix the errors above.'
+                                                            : 'Drop your image here, or click to browse'}
                                                     </p>
-                                                    {!error && (
+                                                    {combinedErrors.length === 0 && (
                                                         <p className="text-sm text-gray-500 dark:text-gray-400">
                                                             Supports: JPG, PNG, GIF, WebP (max 10MB)
                                                         </p>
@@ -157,7 +189,7 @@ export default function ImageUpload({}: ImageUploadProps): JSX.Element {
 
                                 <button
                                     type="submit"
-                                    disabled={!selectedImage || isUploading || !!error}
+                                    disabled={!selectedImage || isUploading || combinedErrors.length > 0}
                                     className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent
                     rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700
                     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
